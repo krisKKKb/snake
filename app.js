@@ -35,7 +35,7 @@ function drawSnake() {
 
 
 
-function updateLocation() {
+function updateSnakeLocation() {
     let newX, newY
 
 
@@ -64,7 +64,15 @@ function updateLocation() {
     snakeCoordinates.unshift([newX, newY])
     snakeCoordinates.pop()
 }
+function updateFoodLocation() {
+    let x, y
 
+    do {
+        x = Math.floor(Math.random() * 80)
+        y = Math.floor(Math.random() * 80)
+    } while (snakeCoordinates.includes([x, y]))
+    return [x, y]
+}
 
 
 let snakeCoordinates = [
