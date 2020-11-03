@@ -7,22 +7,93 @@ function convertToPixels(n) {
     }
     return n * 8
 }
-function updateSnake() {
+
+
+
+function draw() {
+    updateLocation()
+    drawSnake()
+    setTimeout(() => {
+        window.requestAnimationFrame(draw)
+    }, gameSpeed);
+}
+
+
+
+function drawSnake() {
+    context.clearRect(0, 0, canvas.width, canvas.height)
     context.strokeStyle = 'white'
     context.lineWidth = 1
 
+
+
     snakeCoordinates.forEach(c => {
         context.fillRect(convertToPixels(c[0]), convertToPixels(c[1]), 8, 8)
-        context.sreokeRect(convertToPixels(c[0]), convertToPixels(c[1]), 8, 8)
+        context.strokeRect(convertToPixels(c[0]), convertToPixels(c[1]), 8, 8)
     })
 }
+
+
+
+function updateLocation() {
+    let newX, newY
+
+
+
+    switch (direction) {
+        case 'up':
+            newX = snakeCoordinates[0][0]
+            newY = snakeCoordinates[0][1] - 1
+            break
+        case 'down':
+            newX = snakeCoordinates[0][0]
+            newY = snakeCoordinates[0][1] + 1
+            break
+        case 'left':
+            newX = snakeCoordinates[0][0] - 1
+            newY = snakeCoordinates[0][1]
+            break
+        case 'right':
+            newX = snakeCoordinates[0][0] + 1
+            newY = snakeCoordinates[0][1]
+            break
+    }
+
+
+
+    snakeCoordinates.unshift([newX, newY])
+    snakeCoordinates.pop()
+}
+
+
+
 let snakeCoordinates = [
     [40, 40],
     [40, 41],
     [39, 41],
     [38, 41]
 ]
-const canvas = document.getElementById("gameBoard")
-const context = canvas.getContext("2d")
+const canvas = document.getElementById('gameBoard')
+const context = canvas.getContext('2d')
+let direction = 'up'
+let gameSpeed = 300
 
-updateSnake()
+document.addEventListener("keydown", e => {
+    switch (e.key) {
+        case "ArrowUp":
+            direction = "up"
+            break
+        case "ArrowDown":
+            direction = "down"
+            break
+        case "ArrowLeft":
+            direction = "left"
+            break
+        case "ArrowRight":
+            direction = "right"
+            break
+    }
+    console.log(e.key)
+})
+drawSnake()
+window.requestAnimationFrame(draw)
